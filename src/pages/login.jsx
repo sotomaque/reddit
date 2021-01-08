@@ -1,27 +1,31 @@
 import React from 'react';
 import { auth } from 'utils/nhost';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-export default function Register() {
+export default function Login() {
+  const router = useRouter();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      await auth.register(email, password);
+      await auth.login(email, password);
     } catch (err) {
-      return alert('Register Failed');
+      return alert('Login Failed');
     }
 
-    alert('Registration Successful');
+    alert('Login Successful');
+    // redirect user
+    router.push('/');
   }
 
   return (
     <div className="container mx-auto">
       <div className="flex flex-col max-w-xl mx-auto shadow p-4 my-12">
         <div className="text-center uppercase text-gray-700 text-sm pb-4">
-          Register
+          Login
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -43,14 +47,14 @@ export default function Register() {
             />
             <div className="flex justify-center">
               <button className="inline bg-indigo-700 text-white uppercase px-4 py-2">
-                Register
+                Login
               </button>
             </div>
 
             <div className="pt-6 text-center text-gray-700">
-              Already have an account?{' '}
-              <Link href="/login">
-                <a className="text-indigo-700 hover:underline">Login</a>
+              Don't have an account?{' '}
+              <Link href="/register">
+                <a className="text-indigo-700 hover:underline">Register</a>
               </Link>
             </div>
           </div>
