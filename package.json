@@ -1,0 +1,26 @@
+{
+  "name": "reddit",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@nhost/react-apollo": "^1.0.7",
+    "@nhost/react-auth": "^1.0.5",
+    "graphql": "^15.4.0",
+    "next": "10.0.5",
+    "nhost-js-sdk": "^2.3.4",
+    "react": "17.0.1",
+    "react-dom": "17.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.0.2",
+    "autoprefixer": "^9",
+    "postcss": "^7",
+    "postcss-preset-env": "^6.7.0",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
+  }
+}
