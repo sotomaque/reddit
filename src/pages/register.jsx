@@ -1,6 +1,7 @@
 import React from 'react';
 import { auth } from 'utils/nhost';
 import Link from 'next/link';
+import { Layout } from 'components/Layout';
 
 export default function Register() {
   const [email, setEmail] = React.useState('');
@@ -18,7 +19,7 @@ export default function Register() {
   }
 
   return (
-    <div className="container mx-auto">
+    <Layout>
       <div className="flex flex-col max-w-xl mx-auto shadow p-4 my-12">
         <div className="text-center uppercase text-gray-700 text-sm pb-4">
           Register
@@ -56,6 +57,6 @@ export default function Register() {
           </div>
         </form>
       </div>
-    </div>
+    </Layout>
   );
 }

@@ -1,7 +1,9 @@
 import React from 'react';
-import { auth } from 'utils/nhost';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { auth } from 'utils/nhost';
+import { Layout } from 'components/Layout';
 
 export default function Login() {
   const router = useRouter();
@@ -22,7 +24,7 @@ export default function Login() {
   }
 
   return (
-    <div className="container mx-auto">
+    <Layout>
       <div className="flex flex-col max-w-xl mx-auto shadow p-4 my-12">
         <div className="text-center uppercase text-gray-700 text-sm pb-4">
           Login
@@ -60,6 +62,6 @@ export default function Login() {
           </div>
         </form>
       </div>
-    </div>
+    </Layout>
   );
 }
