@@ -1,20 +1,23 @@
 import gql from 'graphql-tag';
-import { useQuery } from '@apollo/client';
+import { useSubscription } from '@apollo/client';
 
-import { Layout, Main } from 'components/Layout';
+import { PostListed } from './PostListed';
+import { useAuth } from '@nhost/react-auth';
 
-const GET_POSTS = gql`
-  query getPosts {
+const S_GET_POSTS = gql`
+  subscription getPosts {
     posts {
       id
       title
       description
+      user_id
     }
   }
 `;
 
 export function ListPosts() {
-  const { loading, error, data } = useQuery(GET_POSTS);
+  const { signedIn } = useAuth();
+  const { loading, error, data } = useSubscription(S_GET_POSTS);
 
   if (loading && !data) {
     return <div>Loading...</div>;
@@ -29,13 +32,10 @@ export function ListPosts() {
   const { posts } = data;
 
   return (
-    <Layout>
-      <Main>
-        {posts.map((post) => {
-          console.log('post:', post);
-          return <div key={post.id}>{post.title}</div>;
-        })}
-      </Main>
-    </Layout>
+    <div className="my-8">
+      {posts.map((post) => {
+        return <PostListed key={post.id} post={post} signedIn={signedIn} />;
+      })}
+    </div>
   );
 }

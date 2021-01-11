@@ -1,9 +1,14 @@
 import { useAuth } from '@nhost/react-auth';
 
+import { Layout, Main } from 'components/Layout';
 import { ListPosts } from 'components/ListPosts';
 
 export default function Home() {
   const { signedIn } = useAuth();
 
-  return <div>{signedIn && <ListPosts />}</div>;
+  return (
+    <Layout>
+      <Main>{signedIn && <ListPosts />}</Main>
+    </Layout>
+  );
 }

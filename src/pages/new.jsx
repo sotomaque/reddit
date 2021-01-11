@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
 
 import { Layout, Main } from 'components/Layout';
+import { Router, useRouter } from 'next/router';
 
 const INSERT_POST = gql`
   mutation insertPost($post: posts_insert_input!) {
@@ -13,6 +14,7 @@ const INSERT_POST = gql`
 `;
 
 export default function New() {
+  const router = useRouter();
   const [title, setTitle] = React.useState('');
   const [description, setDescription] = React.useState('');
 
@@ -35,6 +37,7 @@ export default function New() {
     }
     console.log('post created');
     // redirect to post
+    router.push('/');
   }
 
   return (
