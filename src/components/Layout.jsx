@@ -56,16 +56,20 @@ export function Header() {
     <div className="flex items-center justify-between bg-indigo-700 text-white p-4">
       <div>RedditClone</div>
       <div className="flex items-center">
-        {signedIn && <div>Create Post</div>}
+        {signedIn && (
+          <div>
+            <Link href="/new">Create Post</Link>
+          </div>
+        )}
         <div>
           {signedIn ? (
             <UserHeader />
           ) : (
             <div>
-              <Link href="login">
+              <Link href="/login">
                 <a className="px-4">Login</a>
               </Link>
-              <Link href="register">
+              <Link href="/register">
                 <a className="px-4">Register</a>
               </Link>
             </div>
