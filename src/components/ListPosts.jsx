@@ -11,6 +11,23 @@ const S_GET_POSTS = gql`
       title
       description
       user_id
+      user {
+        id
+        display_name
+      }
+      post_votes {
+        vote_type
+        user {
+          id
+        }
+      }
+      post_votes_aggregate {
+        aggregate {
+          sum {
+            vote_type
+          }
+        }
+      }
     }
   }
 `;

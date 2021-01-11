@@ -14,30 +14,90 @@ const DELETE_POST = gql`
   }
 `;
 
-export function PostListed({ post = {}, signedIn }) {
-  console.log('signedIn', { signedIn });
-  console.log(post.user_id);
-  console.log('auth', auth.getClaim('x-hasura-user-id'));
+const UPSERT_POST_VOTE = gql`
+  mutation upsertPostVote($post_vote: post_votes_insert_input!) {
+    insert_post_votes_one(
+      object: $post_vote
+      on_conflict: {
+        constraint: post_votes_post_id_user_id_key
+        update_columns: vote_type
+      }
+    ) {
+      id
+    }
+  }
+`;
 
+export function PostListed({ post = {}, signedIn }) {
   const [deletePost] = useMutation(DELETE_POST, {
     variables: {
       post_id: post.id,
     },
   });
+  const [upsertPostVote] = useMutation(UPSERT_POST_VOTE);
+
+  async function handleVote({ vote_type }) {
+    try {
+      await upsertPostVote({
+        variables: {
+          post_vote: {
+            post_id: post.id,
+            vote_type,
+          },
+        },
+      });
+    } catch (error) {
+      console.error('error upvoting', error);
+    }
+  }
+
+  const hasUpvotedPost = post.post_votes.filter(
+    (like) =>
+      like.user.id === auth.getClaim('x-hasura-user-id') && like.vote_type === 1
+  );
+  const hasDownvotedPost = post.post_votes.filter(
+    (like) =>
+      like.user.id === auth.getClaim('x-hasura-user-id') &&
+      like.vote_type === -1
+  );
 
   return (
     <div className="flex shadow-md p-6">
       <div className="flex flex-col items-center">
-        <div className="cursor-pointer hover:bg-green-700 rounded-full hover:text-white p-2">
+        {/* UPVOTE */}
+        <div
+          onClick={() => handleVote({ vote_type: 1 })}
+          className={`cursor-pointer ${
+            hasUpvotedPost.length
+              ? 'bg-green-700 text-white'
+              : 'hover:bg-green-700  hover:text-white'
+          } rounded-full p-2`}
+        >
           <SvgArrowUp className="w-6 h-6" />
         </div>
-        <div className="py-4">17</div>
-        <div className="cursor-pointer hover:bg-red-700 rounded-full hover:text-white p-2">
+        {/* COUNT */}
+        <div className="py-4">
+          {post.post_votes_aggregate.aggregate.sum.vote_type
+            ? post.post_votes_aggregate.aggregate.sum.vote_type
+            : 0}
+        </div>
+        {/* DOWNVOTE */}
+        <div
+          onClick={() => handleVote({ vote_type: -1 })}
+          className={`cursor-pointer ${
+            hasDownvotedPost.length
+              ? 'bg-red-700 text-white'
+              : 'hover:bg-red-700  hover:text-white'
+          } rounded-full p-2`}
+        >
           <SvgArrowDown className="w-6 h-6" />
         </div>
       </div>
       <div className="pl-6">
         <div className="text-3xl font-semibold">{post?.title}</div>
+        <div className="text-sm py-2 font-light">
+          Created By: {post?.user.display_name}
+        </div>
         <div className="text-gray-800 py-4">{post?.description}</div>
         {signedIn && post.user_id === auth.getClaim('x-hasura-user-id') && (
           <div className="flex items-center">
