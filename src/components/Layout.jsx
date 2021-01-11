@@ -54,7 +54,11 @@ export function Header() {
 
   return (
     <div className="flex items-center justify-between bg-indigo-700 text-white p-4">
-      <div>RedditClone</div>
+      <div>
+        <Link href="/">
+          <a>RedditClone</a>
+        </Link>
+      </div>
       <div className="flex items-center">
         {signedIn && (
           <div>
